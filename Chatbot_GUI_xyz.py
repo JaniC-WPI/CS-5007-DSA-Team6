@@ -108,6 +108,8 @@ class ChatBotGUI:
         self.user_input["yscrollcommand"] = self.input_scrollbar.set
         self.user_input.pack(side=LEFT, fill=X)
         self.user_input.focus()
+
+        #This is where the sent messages are being put!!!!!
         self.user_input.bind("<KeyRelease-Return>", self.__send_message)
 
         position_to_center(win=self.root)
@@ -131,6 +133,7 @@ class ChatBotGUI:
     def __select_emoji(self, emojiString):
         self.user_input.insert(END, emoji.emojize(emojiString))
 
+    #This is what we need to modify!
     def __send_message(self, event):
         # will keep adjustment : add scorllbar in the message area, adjust the size of message area
         # and thing about how to set up "return" as entry or \n
