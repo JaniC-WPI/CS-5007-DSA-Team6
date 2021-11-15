@@ -1,0 +1,91 @@
+{"intents": [
+    {"tag": "greeting",
+     "patterns": ["Hi", "Hey", "Is anyone there?", "Hello", "Hay", "Greetings", "Howdy", "bonjour"],
+     "responses": ["Hi, how can I help you today", "How may I assist you?"]
+    },
+    {"tag": "goodbye",
+     "patterns": ["Bye", "See you later", "Goodbye", "bye bye", "adios", "so long", "ciao", "adieu"],
+     "responses": ["See you later", "Have a nice day", "Bye! Come back again", "It was nice talking to you. Come back again!"]
+    },
+    {"tag": "thanks",
+     "patterns": ["Thanks", "Thank you", "That's helpful", "Thanks for the help", "Thank you for the assistance", "Much obliged", "Thank you for the aid", "Thank you for the support", "Thank you for the service"],
+     "responses": ["Happy to help!", "Any time!", "My pleasure", "You're most welcome!"]
+    },
+    {"tag": "about",
+     "patterns": ["Who are you?", "What are you?", "Can you tell me who you are?" ],
+     "responses": ["I'am Joana, your bot assistant", "I'am Joana, an Artificial Intelligent bot"]
+    },
+    	{"tag": "feelings - questions",
+     "patterns": ["I would like to talk about my feelings","Is this a safe space to talk?"],
+     "responses": ["Absolutely, I am here for you. We can talk this is a judgement free zone. But, may I ask a few questions before we begin?"]
+    },
+	{"tag": "feelings - statement",
+     "patterns": ["I am feeling upset", "I am not feeling well today", "Yes, I want to talk."],
+     "responses": ["Absolutely I am here for you. May I ask a few questions before we begin? You can always decline to answer any of our questions. Just say \"I decline\" and I will move on.", "I am sorry to hear that. Do you want to talk about it?"]
+    },
+	{"tag": "name",
+     "patterns": ["Sure", "Of course", "yes"],
+     "responses": ["Great! May, I know your name? You can decline to answer if you don't feel comfortable. Otherwise, may you give me your name in the following pattern - \"My name is \" "]
+    },
+	{"tag": "my name is",
+     "patterns": ["My name is", "First name", "Last name", "My first name is", "My last name is"],
+     "responses": ["Hello {username}, may I know how old are you? Again, you may decline to answer, but it will help me immensely to help you. You can just say your age and end with  \" years old\" "]
+    },
+	{"tag": "age Need to change zip code. Have it check that its in MA and then move on. Give the url later.",
+     "patterns": ["years old"],
+     "responses": ["Thank you for answering. May I know where you live? You can give me your zip code just say \"My zip code is\" "]
+     },
+	{"tag": "I decline -- Need to fix any of these because the bot wont ask the next question. Maybe check the previous response and hard code the next question?",
+     "patterns": ["I decline"],
+     "responses": [""]
+    },
+	{"tag": "address",
+     "patterns": ["My address is", "My zip code is", "The city I live in", "I live near", "The city I live near"],
+     "responses": ["Thanks a lot. Can you please tell me about your occupation?"]
+    },
+	{"tag": "occupation",
+     "patterns": ["student", "teacher", "nurse", "doctor", "banker", "lawyer", "fireman", "policeman", "logger", "cashier", "manager", "lab technician", "scientist", "developer", "Professor", "Data Scientist"],
+     "responses": ["That is awesome. Let's talk about your feelings now."]
+    }, 
+	{"tag": "user-feelings",
+     "patterns": ["I have been feeling sad", "I have been feeling upset", "I have been feeling bitter", "I have been feeling downcast", "I have not been feeling well", "I have been feeling mournful", "I have been feeling dismal", "I have been feeling pessimistic", "I have been feeling somber", "I have been feeling sorrowful", "I have been feeling unhappy", "I have been feeling despondent", "I have been feeling distressed", "I am down in the dumps", "I have been down", "I have been feeling down", "I have been feeling glum", "I have been gloomy", "I have been feeling gloomy", "I am not happy", "I have been feeling troubled", "I have been troubled lately"],
+     "responses": ["May I know for how long you have been feeling like this"]
+    },
+	{"tag": "user-time",
+     "patterns": ["For a week", "A few weeks", "About a week","For a couple of weeks", "For a month", "For a few months", "For a couple of months", "About a few months", "About a month", "For a day", "For a few days", "For a couple of days","More than a few weeks", "More than a few months", "More than a few days", "For about a year", "More than a year", "A little less than a year", "A little less than a month", "For a year", "For a few years", "About a year"],
+     "responses": ["Have you talked with anyone about it"]
+    },
+	{"tag": "user-talk bout it",
+     "patterns": ["No I don't want to discuss this with anyone else", "I do not wish to talk about it", "I dont feel like talking about it"],
+     "responses": ["That is ok. That's why I am here. Can you tell me about what else you are feeling?"]
+    },
+	{"tag": "TC#15 for depression -- Need to go over this as its very specific and TC#16 is not functional right now as well as the rest since we are now using sentiment the rest",
+     "patterns": ["I have also been anxious"],
+     "responses": ["Anxious about anything particular?"]
+    },
+	{"tag": "TC#12 for psychosis",
+     "patterns": ["I am nervous about meeting my quotas at work", "I am nervous and having problems at work."],
+     "responses": ["How has that been affecting you?"]
+    },
+	{"tag": "TC#13 for psychosis",
+     "patterns": ["I can’t sleep through the night and I can’t sit still"],
+     "responses": ["Can you describe any other ways it is making you feel?"]
+    },
+	{"tag": "TC#14 for psychosis",
+     "patterns": ["I am restless, I can’t relax and I am irritable"],
+     "responses": ["May I know for how long you have been feeling like this "]
+    },
+	{"tag": "TC#15 for psychosis -- need to talk about this one. We can probably skip it.",
+     "patterns": [],
+     "responses": []
+    },
+	{"tag": "Depression",
+     "patterns": ["Guilt", "Worthlessness", "Loss of interest", "Sleep disturbance", "Sleeping too much", "Sleeping too little", "Insomnia", "Irritability", "Crying", "Tiredness", "Fatigue", "Low energy", "Thoughts of death", "Sadness", "Loss of pleasure", "Weight gain", "Weight loss", "Overeating", "Not eating", "Moving slowly", "Poor concentration", "Suicidal thoughts", "Restlessness", "Low self esteem", "Hopelessness", "Poor decision making"],
+     "responses": ["I am sorry to hear that, may I know how long you have been feeling like this?", "Oh I am really sorry, about how long do you think you have been feeling like that?", "I am so sorry, you are feeling like this, how long do you think this has been going on?"]
+    },
+    {"tag": "psychosis",
+     "patterns": ["delusions", "Hallucinations", "hearing voices", "hearing noises", "Seeing things", "hearing things", "smelling things", "Disorganized", "Catalonia", "Confusion", "Being followed", "Poison", "Deceived"],
+     "responses": ["I am sorry to hear that, may I know how long you have been feeling like this?", "Oh I am really sorry, about how long do you think you have been feeling like that?", "I am so sorry, you are feeling like this, how long do you think this has been going on?"]
+    }
+]
+}

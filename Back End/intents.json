@@ -1,0 +1,63 @@
+{"intents": [
+    {"tag": "greeting",
+     "patterns": ["Hi", "Hey", "Is anyone there?", "Hello", "Hay", "Greetings"],
+     "responses": ["Hi, how can I help you today", "How may I assist you?"]
+    },
+    {"tag": "goodbye",
+     "patterns": ["Bye", "See you later", "Goodbye"],
+     "responses": ["See you later", "Have a nice day", "Bye! Come back again", "It was nice talking to you. Come back again!"]
+    },
+    {"tag": "thanks",
+     "patterns": ["Thanks", "Thank you", "That's helpful", "Thanks for the help"],
+     "responses": ["Happy to help!", "Any time!", "My pleasure", "You're most welcome!"]
+    },
+    {"tag": "about",
+     "patterns": ["Who are you?", "What are you?", "Who you are?" ],
+     "responses": ["I'am Joana, your bot assistant", "I'am Joana, an Artificial Intelligent bot"]
+    },
+    	{"tag": "feelings - questions",
+     "patterns": ["I would like to talk about my feelings","Is this a safe space to talk?"],
+     "responses": ["Absolutely, I am here for you. We can talk this is a judgement free zone. But, may I ask a few questions before we begin?"]
+    },
+	{"tag": "feelings - statement",
+     "patterns": ["I am feeling upset", "I am not feeling well today", "Yes, I want to talk."],
+     "responses": ["Absolutely I am here for you. May I ask a few questions before we begin? You can always decline to answer any of our questions. Just say \"I decline\" and I will move on.", "I am sorry to hear that. Do you want to talk about it?"]
+    },
+	{"tag": "affirmatives",
+     "patterns": ["."],
+     "responses": ["."]
+    },
+	{"tag": "name",
+     "patterns": ["Sure", "Of course", "yes"],
+     "responses": ["Great! May, I know your name? You can decline to answer if you don't feel comfortable. Otherwise, may you give me your name in the following pattern - \"My name is \" "]
+    },
+	{"tag": "my name is",
+     "patterns": ["My name is", "I am", "First name", "Last name"],
+     "responses": ["Hello {username}, may I know how old are you? Again, you may decline to answer, but it will help me immensely to help you."]
+    },
+	{"tag": "age",
+     "patterns": ["I am years old"],
+     "responses": ["Thank you for answering. May I know where you live? You can give me an entire address just say \"My address is\", or you may give just your zip code just say \"My zip code is.\" "]
+     },
+	{"tag": "I decline",
+     "patterns": ["I decline"],
+     "responses": [""]
+    },
+	{"tag": "address",
+     "patterns": ["My address is", "My zip code is"],
+     "responses": ["Thanks a lot. Can you please tell me about your occupation?"]
+    },
+	{"tag": "occupation",
+     "patterns": ["student", "teacher", "nurse", "doctor", "banker", "lawyer", "fireman", "policeman", "logger", "cashier", "manager", "lab technician", "scientist", "developer"],
+     "responses": ["That is awesome. Let's talk about your feelings now."]
+    }, 
+	{"tag": "tag name here",
+     "patterns": ["."],
+     "responses": ["."]
+    },
+    {"tag": "psychosis",
+     "patterns": ["delusions", "Hallucinations", "hearing voices", "hearing noises", "Seeing things", "hearing things", "smelling things", "Disorganized", "Catalonia", "Confusion", "Being followed", "Poison", "Deceived"],
+     "responses": ["I am sorry to hear that, may I know how long you have been feeling like this?", "Oh I am really sorry, about how long do you think you have been feeling like that?", "I am so sorry, you are feeling like this, how long do you think this has been going on?"]
+    }
+]
+}

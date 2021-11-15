@@ -1,0 +1,63 @@
+{"intents": [
+    {"tag": "greeting",
+     "patterns": ["Hi", "Hey", "Is anyone there?", "Hello", "Hay", "Greetings", "Howdy", "bonjour"],
+     "responses": ["Hi, how can I help you today", "How may I assist you?"]
+    },
+    {"tag": "goodbye",
+     "patterns": ["Bye", "See you later", "Goodbye", "bye bye", "adios", "so long", "ciao", "adieu"],
+     "responses": ["See you later", "Have a nice day", "Bye! Come back again", "It was nice talking to you. Come back again!"]
+    },
+    {"tag": "thanks",
+     "patterns": ["Thanks", "Thank you", "That's helpful", "Thanks for the help", "Thank you for the assistance", "Much obliged", "Thank you for the aid", "Thank you for the support", "Thank you for the service"],
+     "responses": ["Happy to help!", "Any time!", "My pleasure", "You're most welcome!"]
+    },
+    {"tag": "about",
+     "patterns": ["Who are you?", "What are you?", "Can you tell me who you are?" ],
+     "responses": ["I'am Joana, your bot assistant", "I'am Joana, an Artificial Intelligent bot"]
+    },
+    	{"tag": "feelings - questions",
+     "patterns": ["I would like to talk about my feelings","Is this a safe space to talk?"],
+     "responses": ["Absolutely, I am here for you. We can talk. This is a judgement free zone. But, may I ask a few questions before we begin?"]
+    },
+	{"tag": "feelings - statement",
+     "patterns": ["I am feeling upset", "I am not feeling well today", "Yes, I want to talk."],
+     "responses": ["Absolutely I am here for you. May I ask a few questions before we begin? You can always decline to answer any of our questions. Just say \"I decline\" and I will move on.", "I am sorry to hear that. Do you want to talk about it?"]
+    },
+	{"tag": "name",
+     "patterns": ["Sure", "Of course", "yes"],
+     "responses": ["Great! May, I know your name? You can decline to answer if you don't feel comfortable. Otherwise, may you give me your name in the following pattern - \"My name is \" "]
+    },
+	{"tag": "my name is",
+     "patterns": ["My name is", "First name", "Last name", "My first name is", "My last name is"],
+     "responses": ["Hello {username}, may I know how old are you? Again, you may decline to answer, but it will help me immensely to help you. You can just say your age and end with  \" years old\" "]
+    },
+	{"tag": "age Need to change zip code. Have it check that its in MA and then move on. Give the url later.",
+     "patterns": ["years old"],
+     "responses": ["Thank you for answering. May I know where you live? You can give me your zip code just say \"My zip code is\" "]
+     },
+	{"tag": "I decline",
+     "patterns": ["I decline"],
+     "responses": ["Understood"]
+    },
+	{"tag": "address",
+     "patterns": ["My address is", "My zip code is", "The city I live in", "I live near", "The city I live near"],
+     "responses": ["Can you please tell me about your occupation?"]
+    },
+	{"tag": "occupation",
+     "patterns": ["student", "teacher", "nurse", "doctor", "banker", "lawyer", "fireman", "policeman", "logger", "cashier", "manager", "lab technician", "scientist", "developer", "Professor", "Data Scientist", "chef", "cook", "sous chef", "dish washer", "administrator", "CEO", "CFO", "COO", "Vice president", "data analyst", "janitor", "receptionist", "engineer", "park ranger", "warden", "body guard", "judge", "constable", "sky marshal", "special agent", "conservation officer", "mechanic", "Foreman", "Arborist", "Miller", "Farmer", "plant operator", "plumber", "welder", "electrician", "woodworker", "construction worker", "factor worker", "wheelwright", "soaper", "IT", "saw filer", "panel beater", "mold maker", "smith", "jeweler", "founder", "boiler maker", "pipefitter", "millwright", "gunsmith", "blacksmith", "ironworker", "porter", "captain", "inspector", "ticket controller", "comptroller", "lawman", "points man", "ticket inspector", "train dispatcher", "dispatcher", "signalman", "security guard", "bookbinder", "draper", "hatter","glover", "dressmaker", "leather worker", "quilter", "sailmaker", "tailor", "taxidermist", "upholsterer", "seamstress", "shoemaker", "sales associate", "veterinarian", "biologist", "biomedical scientist", "botanist", "herpetologist", "medical laboratory scientist", "microbiologist", "neuroscientist", "zoologist", "Clinical pharmaceutical scientist", "pharmacist", "physician", "mathematician", "statistician", "inventor", "research fellow", "phd student", "inventor", "government scientist", "healthcare worker", "healthcare science", "chemist", "ecologist", "forester", "astronomer", "astronaut", "archaeologist", "naturalist", "oceanographer", "paleontologist", "pathologist", "physicist", "geographer", "geologist", "historian", "urban planner", "sociologist", "economist", "clown", "athlete", "actor", "comedian", "host", "musician", "poet", "podcaster", "youtuber", "singer", "celebrity", "writer", "animator", "director", "news anchor", "executive producer", "director", "screen writer", "production assistant", "showrunner", "stunt coordinator", "editor", "video editor", "voice actor", "make up artist", "deliveryman" ],
+     "responses": ["That is awesome. Could you please describe to me in as much detail as possible how you have been feeling. As well as how long you have been feeling that way."]
+    },
+	{"tag": "Depression",
+     "patterns": ["I have also been anxious", "Guilt", "regret", "remorse", "shame", "sin", "stigma", "failure", "disgrace", "inadequacy", "Worthlessness", "lack of enthusiasm", "absence of concern", "I dont have the same passion as I used too", "Loss of interest", "Sleep disturbance", "my sleep is frequently interrupted", "restlessness", "sleeplessness", "wakefulness","Sleeping too much", "Sleeping too little", "Insomnia", "Irritability", "annoyance", "sobbing", "Crying","fatigue","weariness", "burned out", "Tiredness", "Fatigue", "Low energy", "Thoughts of death", "Sadness", "Loss of pleasure", "Weight gain", "Weight loss", "Overeating", "Not eating", "voraciousness", "voracity", "Moving slowly", "Poor concentration", "lack of focus", "Suicidal thoughts", "depressed", "agitation", "Restlessness", "Low self esteem", "Hopelessness", "gloom", "melancholy", "misery", "despondent", "sense of sorrow", "dejected", "Poor decision making"],
+     "responses": ["I am sorry to hear that, may I know how long you have been feeling like this?", "Oh I am really sorry, about how long do you think you have been feeling like that?", "I am so sorry, you are feeling like this, how long do you think this has been going on?"]
+    },
+    {"tag": "psychosis",
+     "patterns": ["I am restless, I cannot relax and I am irritable", "I cannot sleep through the night and I cannot sit still", "I am nervous about meeting my quotas at work", "I am nervous and having problems at work.", "delusions","psychosis", "insanity", "schizophrenia", "derangement", "lunacy", "Hallucinations", "phantom", "aberration", "mirage", "vision", "hearing voices", "hearing noises", "Seeing things", "hearing things", "smelling things", "Disorganized", "chaotic", "disordered", "Catalonia", "Confusion", "Being followed", "Poison", "Deceived"],
+     "responses": ["I am sorry to hear that, may I know how long you have been feeling like this?", "Oh I am really sorry, about how long do you think you have been feeling like that?", "I am so sorry, you are feeling like this, how long do you think this has been going on?"]
+    },
+	{"tag": "Anxiety",
+     "patterns": ["Panic", "Panic Attack", "Anxiety Attack", "Worry", "Worrying", "Anxious", "Racing Thoughts", "Obsession", "Obsessive", "Compulsion", "Intrusive thoughts", "Unwanted", "Repetitive", "Ritualistic", "Nervous", "Irritability", "Irritable", "Restlessness", "Keyed up", "nervous breakdown", "On edge", "Tension", "Sleep disturbance", "Difficulty Falling Asleep", "Difficulty staying asleep", "Restless sleep", "Phobia", "Difficulty concentrating", "Easily fatigued", "Fear of germs", "Fear of contamination", "Witnessing traumatic events", "Experiencing traumatic events", "Recurrent dreams", "Involuntary thoughts", "Repetitive memories", "Dissociative reactions", "Flashbacks", "Avoidance of reminders", "Negative beliefs", "Hypervigilance", "Exaggerated startled response", "Fearful of social situations", "Embarrassing", "Humiliation", "Unfamiliar people"],
+     "responses": ["I am sorry to hear that, may I know how long you have been feeling like this?", "Oh I am really sorry, about how long do you think you have been feeling like that?", "I am so sorry, you are feeling like this, how long do you think this has been going on?"]
+    }
+]
+}
