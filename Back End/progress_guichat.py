@@ -151,7 +151,7 @@ def getResponse(ints, intents_json):
         if(i['tag']== tag):
             result = random.choice(i['responses'])
             break
-    return result
+    return result, tag
 
 
 #Handles the bots responses based off the input and intents file and semantic search
