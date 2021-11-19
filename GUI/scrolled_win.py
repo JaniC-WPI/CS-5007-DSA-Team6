@@ -42,8 +42,6 @@ class ScrolledWindow(Frame):
         # creating a frame in canvas
         self.scrollwindow = Frame(self.parent)
         self.canv.create_window((0, 0), window=self.scrollwindow, anchor='nw')
-
-        #self.yscrlbr.lift(self.scrollwindow)
         self.scrollwindow.bind('<Configure>', self._configure_window)
         self.scrollwindow.bind('<Enter>', self._bound_to_mousewheel)
         self.scrollwindow.bind('<Leave>', self._unbound_to_mousewheel)

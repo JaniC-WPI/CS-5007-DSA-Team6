@@ -26,6 +26,7 @@ class ChatBotGUI:
         self.user_name = ""
         self.conversation_win = None
         self.scrolled_win = None
+    # the whole conversation between user and ChatBot is saved in a member self.all_conversations of class ChatBotGUI.
         self.all_conversations = []
         self.user_input = None
         self.emoji_button = None
@@ -52,7 +53,6 @@ class ChatBotGUI:
 
         start_button = Button(welcome_win, text="Start",
                               command=lambda: self.open_chat_win(welcome_win, name_entry.get()))
-        
         start_button.place(relx=0.3, rely=0.45)
 
         position_to_center(win=welcome_win)
@@ -62,10 +62,8 @@ class ChatBotGUI:
     def new_text(self, name, text, align):
         name_widget = Label(self.scrolled_win.scrollwindow, text=name, anchor=align, font=("Bree Serif", 12), foreground="orange")
         name_widget.pack(side=TOP, fill=X)
-        
-        #IDK why we are appending all these to a list and doing nothing with it! Doesnt seems to change anything!
         self.all_conversations.append(name_widget)
-
+        # create dynamic text_frame to store each dialog. This is a hard work for our project.
         text_frame = Frame(self.scrolled_win.scrollwindow)
         text_frame.pack(side=TOP, fill=X)
         text_len = int(emoji.demojize(text).count(":") / 2) + len(text) + 1
@@ -79,8 +77,6 @@ class ChatBotGUI:
         text_widget.pack(side=LEFT if align == "nw" else RIGHT)
         text_widget.insert(END, text)
         text_widget.config(state=DISABLED)
-        
-        #IDK why we are appending all these to a list and doing nothing with it! Doesnt seems to change anything!
         self.all_conversations.append(text_widget)
 
         self.scrolled_win.canv.update_idletasks()
@@ -91,16 +87,18 @@ class ChatBotGUI:
         welcome_win.destroy()
         self.root.deiconify()
         self.root.title("Mental Health ChatBot")
+<<<<<<< HEAD
         #Had to change this to true to resize window and see things.
+=======
+>>>>>>> 5bee2900e0015624c5f7d0b2b5295da840be3e30
         self.root.resizable(width=False, height=False)
         self.root.configure(width=400, height=500)
 
         self.conversation_win = Frame(self.root, highlightbackground = '#2165db', 	highlightcolor = '#2165db', highlightthickness = 5)
         self.conversation_win.place(relheight=0.90, relwidth=1, rely=0, relx=0)
         self.scrolled_win = ScrolledWindow(parent=self.conversation_win)
-        
-        #Change the number value to change where the text box gets located. Changed it from original value of 95 so that longer names can be used and it fits the window
-        self.new_text(name="ChatBot" + " " * 78,
+        # set up 95 empty space for making a nice look new text position
+        self.new_text(name="ChatBot" + " " * 95,
                       text="Hi " + self.user_name + ", what can I do for you today?",
                       align="nw")
 
@@ -139,19 +137,23 @@ class ChatBotGUI:
     def __select_emoji(self, emojiString):
         self.user_input.insert(END, emoji.emojize(emojiString))
 
+# def __send_message(self, event) is responsible to post both the user inputs and chatbot responses to the dialog window
     def __send_message(self, event):
-        # will keep adjustment : add scorllbar in the message area, adjust the size of message area
-        # and thing about how to set up "return" as entry or \n
-        # if add some emoji what kind do we need? sad, happy, angry, ........?
+        # The user text input is extracted from the text widget and saved in variable
         message = event.widget.get("1.0", END)
         if not message:
             return
+        # The user input is posted to the dialog by calling
         self.new_text(name=self.user_name, text=message, align="ne")
+        # Clean up the user text input after it gets posted by calling
         self.user_input.delete("1.0", END)
         # Call chatbot to return response.
+        # Once the calling to chatbot is done, its response should be posted to dialog by calling
+        # Currently no chatbot is integrated so the ChatBot repsonse is hard coded by “What a good day!”.
         self.new_text(name="ChatBot", text="What a good day!", align="nw")
 
 
+<<<<<<< HEAD
 """ user_zipcode = []
 #None of this has been formally tested yet but it should run
 #When the user enters a zip code this function is run. It will double check that the zip code is apart of the state of MA. Need to store zip code moving foreword if it is valid.
@@ -203,6 +205,8 @@ def give_url(message):
  elif res.endswith("As well as how long you have been feeling that way"):
                 custom_response = give_url(msg)
                 ChatLog.insert(END, custom_response + '\n\n') """
+=======
+>>>>>>> 5bee2900e0015624c5f7d0b2b5295da840be3e30
 
 def main():
     gui = ChatBotGUI()
