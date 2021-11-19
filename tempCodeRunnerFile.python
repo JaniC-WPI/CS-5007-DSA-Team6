@@ -1,0 +1,5 @@
+x = input("Input bullshit: ")
+token = map(str, x)
+print(token)
+tokens = ' '.join(token).split()
+print(tokens)

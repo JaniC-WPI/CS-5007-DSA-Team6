@@ -39,11 +39,11 @@ class ChatBotGUI:
         welcome_win = Toplevel()
         welcome_win.title("Mental Health ChatBot")
         welcome_win.resizable(width=False, height=False)
-        welcome_win.configure(width=300, height=200)
+        welcome_win.configure(width=300, height=200, highlightbackground = '#2165db', 	highlightcolor = '#2165db', highlightthickness = 5, bg = '#dde3ed')
 
         name_label = Label(welcome_win,
                            text="Please enter your name:",
-                           justify=CENTER)
+                           justify=CENTER, bg = '#dde3ed')
         name_label.place(relx=0.2, rely=0.2)
 
         name_entry = Entry(welcome_win)
@@ -69,13 +69,13 @@ class ChatBotGUI:
         text_frame = Frame(self.scrolled_win.scrollwindow)
         text_frame.pack(side=TOP, fill=X)
         text_len = int(emoji.demojize(text).count(":") / 2) + len(text) + 1
-        text_bg = "white" if name.startswith("ChatBot") else "light gray"
+        text_bg = "#2165db" if name.startswith("ChatBot") else "#04cc65"
         if text_len < 30:
             text_widget = Text(text_frame, wrap=WORD, background=text_bg, width=text_len, height=1,
-                               relief=GROOVE)
+                               relief=GROOVE, fg = 'white')
         else:
             text_widget = Text(text_frame, wrap=WORD, background=text_bg, width=30, font=10, height=text_len/30,
-                               relief=GROOVE)
+                               relief=GROOVE, fg = 'white')
         text_widget.pack(side=LEFT if align == "nw" else RIGHT)
         text_widget.insert(END, text)
         text_widget.config(state=DISABLED)
@@ -91,11 +91,11 @@ class ChatBotGUI:
         welcome_win.destroy()
         self.root.deiconify()
         self.root.title("Mental Health ChatBot")
-        #Had to change this to true to resize window and see things. This can be shut off later.
-        self.root.resizable(width=True, height=True)
+        #Had to change this to true to resize window and see things.
+        self.root.resizable(width=False, height=False)
         self.root.configure(width=400, height=500)
 
-        self.conversation_win = Frame(self.root)
+        self.conversation_win = Frame(self.root, highlightbackground = '#2165db', 	highlightcolor = '#2165db', highlightthickness = 5)
         self.conversation_win.place(relheight=0.90, relwidth=1, rely=0, relx=0)
         self.scrolled_win = ScrolledWindow(parent=self.conversation_win)
         
@@ -104,12 +104,13 @@ class ChatBotGUI:
                       text="Hi " + self.user_name + ", what can I do for you today?",
                       align="nw")
 
-        self.bottom_frame = Frame(self.root)
+        self.bottom_frame = Frame(self.root, highlightbackground = '#2165db', 	highlightcolor = '#2165db', highlightthickness = 5)
         self.bottom_frame.place(relheight=0.1, relwidth=1, rely=0.9, relx=0)
         self.emoji_button = Button(self.bottom_frame, command=self.__open_emoji_dialog, text=emoji.emojize(":grinning_face:"),
                                    width=1, height=2)
         self.emoji_button.pack(side=LEFT, fill=X)
-        self.user_input = Text(self.bottom_frame, width=60, height=3, wrap=WORD, highlightbackground="gray", highlightcolor="gray", highlightthickness=2)
+        #Original colors were gray
+        self.user_input = Text(self.bottom_frame, width=60, height=3, wrap=WORD, highlightbackground="#2165db", highlightcolor="#2165db", highlightthickness=5)
         self.input_scrollbar = Scrollbar(self.bottom_frame, orient=VERTICAL, command=self.user_input.yview)
         self.input_scrollbar.pack(side=RIGHT, fill=Y)
         self.user_input["yscrollcommand"] = self.input_scrollbar.set
@@ -150,6 +151,58 @@ class ChatBotGUI:
         # Call chatbot to return response.
         self.new_text(name="ChatBot", text="What a good day!", align="nw")
 
+
+""" user_zipcode = []
+#None of this has been formally tested yet but it should run
+#When the user enters a zip code this function is run. It will double check that the zip code is apart of the state of MA. Need to store zip code moving foreword if it is valid.
+def zipsearch(user_input_zipcode):
+
+    #Open up a file containing all the zip codes in Massachusets and copy to a 1D list
+    filename = "zipcodes.csv"
+    with open(filename, 'r') as csvfile:
+        zip_codes = [row.strip().split(",") for row in csvfile]
+        flatten_list = list(chain.from_iterable(zip_codes))
+    if user_input_zipcode in flatten_list:
+        user_zipcode.append(user_input_zipcode)
+        return "Thank you for answering."
+    else:
+        return "Please enter a valid MA zip code"
+                    
+def give_url(message):
+    #We can change the numbers later this is just for the test
+    sentiment_analysis_test = 25
+    if sentiment_analysis_test > 20:
+        try:
+                         #Google Search query results as a Python List of URLs
+                         query = 'psychiatrists near ' + user_zipcode[0]
+                         #Right now it gathers three results from google and puts them into a list. num is the number of results it will find. stop is how many it will put into the list. pause is how many times it will search(I think).
+                         search_result_list = list(search(query, tld="co.in", num=3, stop=3, pause=1))
+                         #prints out the url if it contains psychology today. This can be changed.
+                         for url in search_result_list:
+                             if url.startswith('https://www.psychologytoday.com'):
+                                 print(url)
+                                 return str("Here are a list of psychiatrists in your area: ", url)
+        except:
+                         return str("Something went wrong with your video search. Please check your internet connection and try again.")
+    elif 10 < sentiment_analysis_test <= 20:
+        try:
+                         #Google Search query results as a Python List of URLs
+                         query = 'meditation youtube videos'
+                         #Right now it gathers three results from google and puts them into a list. num is the number of results it will find. stop is how many it will put into the list. pause is how many times it will search(I think).
+                         search_result_list = list(search(query, tld="co.in", num=3, stop=3, pause=1))
+                         #prints out the url if it contains psychology today. This can be changed.
+                         for url in search_result_list:
+                                 print(url)
+                                 return str("Here are some calming Youtube videos for you: ", url)
+        except:
+                         return str("Something went wrong with your video search. Please check your internet connection and try again.")
+    else:
+        return "You are fine take a walk and clear your head"
+
+#Need to use this part in the send function 
+ elif res.endswith("As well as how long you have been feeling that way"):
+                custom_response = give_url(msg)
+                ChatLog.insert(END, custom_response + '\n\n') """
 
 def main():
     gui = ChatBotGUI()
