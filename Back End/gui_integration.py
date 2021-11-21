@@ -4,7 +4,6 @@ Created on Sat Nov 13 23:05:39 2021
 
 @author: joshu
 """
-
 import nltk
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
@@ -29,6 +28,7 @@ import tkinter
 from tkinter import *
 from googlesearch import search
 from itertools import chain
+import Chatbot_GUI_xyz
 
 # importing the patterns and ignore words from the chatbot.py
 documents = chatbot.documents
@@ -212,82 +212,137 @@ def age_checker(check_msg):
     if check_msg.endswith(" years old"):
         return check_msg.replace(" years old", "")
 
-#Function handles the text entered into the text box and gives responses based on the input.     
-def send():
-    msg = EntryBox.get("1.0",'end-1c').strip()
-    EntryBox.delete("0.0",END)
-    
-    
-    stored_response = "May I know where you live? You can give me your zip code just say \"My zip code is\" "
-    name_response = name_checker(msg)
-    age_response = age_checker(msg)
-    
-    if msg != '':
-        ChatLog.config(state=NORMAL)
-        ChatLog.insert(END, "You: " + msg + '\n\n')
-        ChatLog.config(foreground="#442265", font=("Verdana", 12 ))
-        
-        #We will need to consider these two lines when responding. 
-        #Could modify the response from the JSON file here. This would enable us to add personal name and other details that the user enters.
-        res = chatbot_response(msg)
+""" user_zipcode = [] # global
+#None of this has been formally tested yet but it should run
+#When the user enters a zip code this function is run. It will double check that the zip code is apart of the state of MA. Need to store zip code moving foreword if it is valid.
+def zipsearch(user_input_zipcode):
+
+    #Open up a file containing all the zip codes in Massachusets and copy to a 1D list
+    filename = "zipcodes.csv"
+    with open(filename, 'r') as csvfile:
+        zip_codes = [row.strip().split(",") for row in csvfile]
+        flatten_list = list(chain.from_iterable(zip_codes))
+    if user_input_zipcode in flatten_list:
+        user_zipcode.append(user_input_zipcode)
+        return "Thank you for answering."
+    else:
+        return "Please enter a valid MA zip code"
+                    
+def give_url(message):
+    #We can change the numbers later this is just for the test
+    sentiment_analysis_test = 25
+    if sentiment_analysis_test > 20:
         try:
-            #If the user enters the name then the bot will respond with that name
-            if res.startswith("Hello"):
-                ChatLog.insert(END, "Bot: " + res.format(username = name_response) + '\n\n')
-            #If the user enters the zip code than the zipsearch function is activated and a nearby psychatrist will be google searched and a url is returned
-            #elif len(msg) == 5 and msg.isdigit() and msg.startswith("0"):
-            elif msg.startswith("My zip code is"):
-                msg = msg.strip("My zip code is")
-                custom_response = zipsearch(msg)
-                if custom_response != "Thank you for answering.":
-                    ChatLog.insert(END, custom_response + '\n\n')
-                else:
-                    ChatLog.insert(END, custom_response + '\n\n')
-                    ChatLog.insert(END, "Bot: " + res + '\n\n')
-            #All other inputs will be handled here
-            elif msg == "I decline":
-                ChatLog.insert(END, "Bot: " + res + '\n\n')
-                ChatLog.insert(END, "Bot: " + stored_response + '\n\n')
-            else:
-                ChatLog.insert(END, "Bot: " + res + '\n\n')
-                
-                #This will still run even if the user doesnt activate the custom response so have to put a try/except block here.
-        except TypeError:
-            pass
-        
-        
-        
-        ChatLog.config(state=DISABLED)
-        ChatLog.yview(END)
+                         #Google Search query results as a Python List of URLs
+                         query = 'psychiatrists near ' + user_zipcode[0]
+                         #Right now it gathers three results from google and puts them into a list. num is the number of results it will find. stop is how many it will put into the list. pause is how many times it will search(I think).
+                         search_result_list = list(search(query, tld="co.in", num=3, stop=3, pause=1))
+                         #prints out the url if it contains psychology today. This can be changed.
+                         for url in search_result_list:
+                             if url.startswith('https://www.psychologytoday.com'):
+                                 print(url)
+                                 return str("Here are a list of psychiatrists in your area: ", url)
+        except:
+                         return str("Something went wrong with your video search. Please check your internet connection and try again.")
+    elif 10 < sentiment_analysis_test <= 20:
+        try:
+                         #Google Search query results as a Python List of URLs
+                         query = 'meditation youtube videos'
+                         #Right now it gathers three results from google and puts them into a list. num is the number of results it will find. stop is how many it will put into the list. pause is how many times it will search(I think).
+                         search_result_list = list(search(query, tld="co.in", num=3, stop=3, pause=1))
+                         #prints out the url if it contains psychology today. This can be changed.
+                         for url in search_result_list:
+                                 print(url)
+                                 return str("Here are some calming Youtube videos for you: ", url)
+        except:
+                         return str("Something went wrong with your video search. Please check your internet connection and try again.")
+    else:
+        return "You are fine take a walk and clear your head"
 
+#Need to use this part in the send function 
+ elif res.endswith("As well as how long you have been feeling that way"):
+                custom_response = give_url(msg)
+                ChatLog.insert(END, custom_response + '\n\n') """
+
+#Function handles the text entered into the text box and gives responses based on the input.     
+# def send():
+#     msg = EntryBox.get("1.0",'end-1c').strip()
+#     EntryBox.delete("0.0",END)
     
-base = Tk()
-base.title("Hello")
-base.geometry("400x500")
-base.resizable(width=FALSE, height=FALSE)
+    
+#     stored_response = "May I know where you live? You can give me your zip code just say \"My zip code is\" "
+#     name_response = name_checker(msg)
+#     age_response = age_checker(msg)
+    
+#     if msg != '':
+#         gui.config(state=NORMAL)
+#         gui.insert(END, "You: " + msg + '\n\n')
+#         gui.config(foreground="#442265", font=("Verdana", 12 ))
+        
+#         #We will need to consider these two lines when responding. 
+#         #Could modify the response from the JSON file here. This would enable us to add personal name and other details that the user enters.
+#         res = chatbot_response(msg)
+#         try:
+#             #If the user enters the name then the bot will respond with that name
+#             if res.startswith("Hello"):
+#                 gui.insert(END, "Bot: " + res.format(username = name_response) + '\n\n')
+#             #If the user enters the zip code than the zipsearch function is activated and a nearby psychatrist will be google searched and a url is returned
+#             #elif len(msg) == 5 and msg.isdigit() and msg.startswith("0"):
+#             elif msg.startswith("My zip code is"):
+#                 msg = msg.strip("My zip code is")
+#                 custom_response = zipsearch(msg)
+#                 if custom_response != "Thank you for answering.":
+#                     gui.insert(END, custom_response + '\n\n')
+#                 else:
+#                     gui.insert(END, custom_response + '\n\n')
+#                     gui.insert(END, "Bot: " + res + '\n\n')
+#             #All other inputs will be handled here
+#             elif msg == "I decline":
+#                 gui.insert(END, "Bot: " + res + '\n\n')
+#                 gui.insert(END, "Bot: " + stored_response + '\n\n')
+#             else:
+#                 gui.insert(END, "Bot: " + res + '\n\n')
+                
+#                 #This will still run even if the user doesnt activate the custom response so have to put a try/except block here.
+#         except TypeError:
+#             pass
+        
+        
+        
+#         gui.config(state=DISABLED)
+#         gui.yview(END)
 
-#Create Chat window
-ChatLog = Text(base, bd=0, bg="white", height="8", width="50", font="Arial",)
+# gui = Chatbot_GUI_xyz.ChatBotGUI()
+# gui.start()
+    
+# base = Tk()
+# base.title("Hello")
+# base.geometry("400x500")
+# base.resizable(width=FALSE, height=FALSE)
 
-ChatLog.config(state=DISABLED)
+# #Create Chat window
+# ChatLog = Text(base, bd=0, bg="white", height="8", width="50", font="Arial",)
 
-#Bind scrollbar to Chat window
-scrollbar = Scrollbar(base, command=ChatLog.yview, cursor="heart")
-ChatLog['yscrollcommand'] = scrollbar.set
+# ChatLog.config(state=DISABLED)
 
-#Create Button to send message
-SendButton = Button(base, font=("Verdana",12,'bold'), text="Send", width="12", height=5,
-                    bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
-                    command= send )
+# #Bind scrollbar to Chat window
+# scrollbar = Scrollbar(base, command=ChatLog.yview, cursor="heart")
+# ChatLog['yscrollcommand'] = scrollbar.set
 
-#Create the box to enter message
-EntryBox = Text(base, bd=0, bg="white",width="29", height="5", font="Arial")
+# #Create Button to send message
+# SendButton = Button(base, font=("Verdana",12,'bold'), text="Send", width="12", height=5,
+#                     bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
+#                     command= send )
+
+# #Create the box to enter message
+# EntryBox = Text(base, bd=0, bg="white",width="29", height="5", font="Arial")
 
 
-#Place all components on the screen
-scrollbar.place(x=376,y=6, height=386)
-ChatLog.place(x=6,y=6, height=386, width=370)
-EntryBox.place(x=128, y=401, height=90, width=265)
-SendButton.place(x=6, y=401, height=90)
+# #Place all components on the screen
+# scrollbar.place(x=376,y=6, height=386)
+# ChatLog.place(x=6,y=6, height=386, width=370)
+# EntryBox.place(x=128, y=401, height=90, width=265)
+# SendButton.place(x=6, y=401, height=90)
 
-base.mainloop()
+# base.mainloop()
+
