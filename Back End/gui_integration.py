@@ -28,7 +28,7 @@ import tkinter
 from tkinter import *
 from googlesearch import search
 from itertools import chain
-import Chatbot_GUI_xyz
+user_zipcode = []
 
 # importing the patterns and ignore words from the chatbot.py
 documents = chatbot.documents
@@ -114,7 +114,7 @@ def semantic_search(user_input, intents_json):
         doc1 = user_input
         # print(doc1)
         doc1_vector = get_sentence_vector(doc1)
-        print(doc1_vector)
+        # print(doc1_vector)
         doc2 = [doc for doc in documents[i][0] if doc not in ignore_words]
         # print(doc2)
         doc2 = " ".join(doc2)
@@ -145,7 +145,7 @@ def sentiment_analysis(user_input):
 
 #Based off intents file tags generates a response
 def getResponse(ints, intents_json):
-    tag = ints[0]['intent']
+    tag = ints[0]['intent']    
     print(tag)
     list_of_intents = intents_json['intents']
     for i in list_of_intents:
@@ -155,22 +155,38 @@ def getResponse(ints, intents_json):
     return result, tag
 
 def zipsearch(user_input_zipcode):
-
     #Open up a file containing all the zip codes in Massachusets and copy to a 1D list
     filename = "zipcodes.csv"
     with open(filename, 'r') as csvfile:
         zip_codes = [row.strip().split(",") for row in csvfile]
         flatten_list = list(chain.from_iterable(zip_codes))
-    if user_input_zipcode in flatten_list:
-        user_zipcode.append(user_input_zipcode)
-        return "Thank you for answering."
+        print(type(flatten_list[0]))
+        # print(flatten_list)
+    user_input_zipcode.strip("\n")
+    print(user_input_zipcode)
+    user_input_zipcode = list(user_input_zipcode.split(" "))
+    print(user_input_zipcode)
+    print(user_input_zipcode[-1])
+    print(user_input_zipcode[-1] in flatten_list)
+    if user_input_zipcode[-1] in flatten_list:
+        print(user_input_zipcode[-1])
+        print(user_input_zipcode[-1] in flatten_list)
+        user_zipcode.append(user_input_zipcode[-1])
+        res1 = "Thank you for answering."
+        return res1
     else:
-        return "Please enter a valid MA zip code"
+        print(user_input_zipcode[-1])
+        print(user_input_zipcode[-1] in flatten_list)
+        res2 = "Please enter a valid MA zip code."
+        return res2
 
 
 #Handles the bots responses based off the input and intents file and semantic search
 def chatbot_response(msg):
     print("Message is", msg)
+    msg_len = len(msg)
+    msg = msg[:msg_len - 2]
+    print(msg)
 # print(doc_lst)
     if msg in doc_lst:
         print(msg in doc_lst)
@@ -179,8 +195,7 @@ def chatbot_response(msg):
         if res1[1] in ('Depression', 'psychosis', 'anxiety'):
             res3 = sentiment_analysis(msg)
         return res1[0]
-    elif (msg not in doc_lst) and (msg.isnumeric()):
-        print(msg.isnumeric())
+    elif msg.startswith("My zipcode is "):
         res5 = zipsearch(msg)
         return res5
     else:
@@ -230,21 +245,21 @@ def age_checker(check_msg):
     if check_msg.endswith(" years old"):
         return check_msg.replace(" years old", "")
 
-user_zipcode = [] # global
-#None of this has been formally tested yet but it should run
-#When the user enters a zip code this function is run. It will double check that the zip code is apart of the state of MA. Need to store zip code moving foreword if it is valid.
-def zipsearch(user_input_zipcode):
+# user_zipcode = [] # global
+# #None of this has been formally tested yet but it should run
+# #When the user enters a zip code this function is run. It will double check that the zip code is apart of the state of MA. Need to store zip code moving foreword if it is valid.
+# def zipsearch(user_input_zipcode):
 
-    #Open up a file containing all the zip codes in Massachusets and copy to a 1D list
-    filename = "zipcodes.csv"
-    with open(filename, 'r') as csvfile:
-        zip_codes = [row.strip().split(",") for row in csvfile]
-        flatten_list = list(chain.from_iterable(zip_codes))
-    if user_input_zipcode in flatten_list:
-        user_zipcode.append(user_input_zipcode)
-        return "Thank you for answering."
-    else:
-        return "Please enter a valid MA zip code"
+#     #Open up a file containing all the zip codes in Massachusets and copy to a 1D list
+#     filename = "zipcodes.csv"
+#     with open(filename, 'r') as csvfile:
+#         zip_codes = [row.strip().split(",") for row in csvfile]
+#         flatten_list = list(chain.from_iterable(zip_codes))
+#     if user_input_zipcode in flatten_list:
+#         user_zipcode.append(user_input_zipcode)
+#         return "Thank you for answering."
+#     else:
+#         return "Please enter a valid MA zip code"
                     
 def give_url(message):
     #We can change the numbers later this is just for the test
