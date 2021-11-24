@@ -107,7 +107,8 @@ def get_sentence_vector(sentence):
     return(np.mean(sent_array, axis=0))
 
 # Semantic analysis
-def semantic_search(user_input, intents_json):    
+def semantic_search(user_input, intents_json):
+    print("Semantic Search is called")
     sim_score = []
     for i in range(len(documents)):
         # print(corpus)
@@ -145,6 +146,7 @@ def sentiment_analysis(user_input):
 
 #Based off intents file tags generates a response
 def getResponse(ints, intents_json):
+    print("Get response is getting called")
     tag = ints[0]['intent']    
     print(tag)
     list_of_intents = intents_json['intents']
@@ -162,7 +164,7 @@ def zipsearch(user_input_zipcode):
         flatten_list = list(chain.from_iterable(zip_codes))
         print(type(flatten_list[0]))
         # print(flatten_list)
-    user_input_zipcode.strip("\n")
+    user_input_zipcode.strip('\n')
     print(user_input_zipcode)
     user_input_zipcode = list(user_input_zipcode.split(" "))
     print(user_input_zipcode)
@@ -172,20 +174,18 @@ def zipsearch(user_input_zipcode):
         print(user_input_zipcode[-1])
         print(user_input_zipcode[-1] in flatten_list)
         user_zipcode.append(user_input_zipcode[-1])
-        res1 = "Thank you for answering."
-        return res1
+        return "Thank you for answering."
     else:
         print(user_input_zipcode[-1])
         print(user_input_zipcode[-1] in flatten_list)
-        res2 = "Please enter a valid MA zip code."
-        return res2
-
+        return "Please enter a valid MA zip code."
 
 #Handles the bots responses based off the input and intents file and semantic search
 def chatbot_response(msg):
     print("Message is", msg)
     msg_len = len(msg)
     msg = msg[:msg_len - 2]
+    # msg = list(msg.split(" "))
     print(msg)
 # print(doc_lst)
     if msg in doc_lst:
