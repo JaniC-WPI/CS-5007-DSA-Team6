@@ -114,6 +114,7 @@ def semantic_search(user_input, intents_json):
         doc1 = user_input
         # print(doc1)
         doc1_vector = get_sentence_vector(doc1)
+        print(doc1_vector)
         doc2 = [doc for doc in documents[i][0] if doc not in ignore_words]
         # print(doc2)
         doc2 = " ".join(doc2)
@@ -153,6 +154,19 @@ def getResponse(ints, intents_json):
             break
     return result, tag
 
+def zipsearch(user_input_zipcode):
+
+    #Open up a file containing all the zip codes in Massachusets and copy to a 1D list
+    filename = "zipcodes.csv"
+    with open(filename, 'r') as csvfile:
+        zip_codes = [row.strip().split(",") for row in csvfile]
+        flatten_list = list(chain.from_iterable(zip_codes))
+    if user_input_zipcode in flatten_list:
+        user_zipcode.append(user_input_zipcode)
+        return "Thank you for answering."
+    else:
+        return "Please enter a valid MA zip code"
+
 
 #Handles the bots responses based off the input and intents file and semantic search
 def chatbot_response(msg):
@@ -162,28 +176,32 @@ def chatbot_response(msg):
         print(msg in doc_lst)
         ints = predict_class(msg, model)
         res1 = getResponse(ints, intents)
-        if res1[1] in ('Depression', 'psychosis'):
+        if res1[1] in ('Depression', 'psychosis', 'anxiety'):
             res3 = sentiment_analysis(msg)
         return res1[0]
+    elif (msg not in doc_lst) and (msg.isnumeric()):
+        print(msg.isnumeric())
+        res5 = zipsearch(msg)
+        return res5
     else:
         print(msg in doc_lst)
         res2 = semantic_search(msg, intents)
-        if res2[1] in ('Depression', 'psychosis'):
+        if res2[1] in ('Depression', 'psychosis', 'anxiety'):
             res4 = sentiment_analysis(msg)
         return res2[0]
 
 #When the user enters a zip code this function is run. It will double check that the zip code is apart of the state of MA. Need to store zip code moving foreword if it is valid.
-def zipsearch(user_input_zipcode):
+# def zipsearch(user_input_zipcode):
 
-    #Open up a file containing all the zip codes in Massachusets and copy to a 1D list
-    filename = "zipcodes.csv"
-    with open(filename, 'r') as csvfile:
-        zip_codes = [row.strip().split(",") for row in csvfile]
-        flatten_list = list(chain.from_iterable(zip_codes))
-    if user_input_zipcode in flatten_list:
-        return "Thank you for answering."
-    else:
-        return "Please enter a valid MA zip code"
+#     #Open up a file containing all the zip codes in Massachusets and copy to a 1D list
+#     filename = "zipcodes.csv"
+#     with open(filename, 'r') as csvfile:
+#         zip_codes = [row.strip().split(",") for row in csvfile]
+#         flatten_list = list(chain.from_iterable(zip_codes))
+#     if user_input_zipcode in flatten_list:
+#         return "Thank you for answering."
+#     else:
+#         return "Please enter a valid MA zip code"
                     
 # =============================================================================
 #             Need to reconfigure this later to look up google search based on zip code       
@@ -212,7 +230,7 @@ def age_checker(check_msg):
     if check_msg.endswith(" years old"):
         return check_msg.replace(" years old", "")
 
-""" user_zipcode = [] # global
+user_zipcode = [] # global
 #None of this has been formally tested yet but it should run
 #When the user enters a zip code this function is run. It will double check that the zip code is apart of the state of MA. Need to store zip code moving foreword if it is valid.
 def zipsearch(user_input_zipcode):
@@ -260,9 +278,9 @@ def give_url(message):
         return "You are fine take a walk and clear your head"
 
 #Need to use this part in the send function 
- elif res.endswith("As well as how long you have been feeling that way"):
-                custom_response = give_url(msg)
-                ChatLog.insert(END, custom_response + '\n\n') """
+# elif res.endswith("As well as how long you have been feeling that way"):
+#                 custom_response = give_url(msg)
+#                 ChatLog.insert(END, custom_response + '\n\n')
 
 #Function handles the text entered into the text box and gives responses based on the input.     
 # def send():

@@ -151,6 +151,10 @@ class ChatBotGUI:
             self.user_input.delete("1.0", END)
         # Call chatbot to return response.
             self.new_text(name="ChatBot", text=res, align="nw")
+            if res.endswith("As well as how long you have been feeling that way"):
+                custom_response = gui_integration.give_url(msg)
+                self.new_text(name="ChatBot", text=custom_response, align="nw")
+
         
         
 #             #If the user enters the name then the bot will respond with that name
