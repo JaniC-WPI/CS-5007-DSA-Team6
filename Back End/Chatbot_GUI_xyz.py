@@ -5,6 +5,7 @@ import emoji
 
 # emoji resource: https://www.geeksforgeeks.org/python-program-to-print-emojis/
 # emoji resource: https://unicode.org/emoji/charts/full-emoji-list.html
+
 emoji_list = [":smiling_face:", ":grinning_face_with_big_eyes:", ":beaming_face_with_smiling_eyes:",
               ":smiling_face_with_halo:", ":winking_face:", ":star-struck:", ":face_blowing_a_kiss:",
               ":face_with_tongue:", ":zany_face:", ":face_with_hand_over_mouth:", ":lying_face:",

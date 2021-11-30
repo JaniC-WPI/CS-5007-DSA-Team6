@@ -109,18 +109,18 @@ def get_sentence_vector(sentence):
 # Semantic analysis
 def semantic_search(user_input, intents_json):
     print("Semantic Search is called")
-    sim_score = []
     try:        
+        sim_score = []
         for i in range(len(documents)):
         # print(corpus)
             doc1 = user_input
-        # print(doc1)
+            print(doc1)
             doc1_vector = get_sentence_vector(doc1)
             # print(doc1_vector)
             doc2 = [doc for doc in documents[i][0] if doc not in ignore_words]
             # print(doc2)
             doc2 = " ".join(doc2)
-            # print(doc2)
+            print(doc2)
             doc2_vector = get_sentence_vector(doc2)    
             sim_lst = cosine_similarity([doc1_vector, doc2_vector])
             sim_score.append(sim_lst[1][0])
@@ -132,19 +132,21 @@ def semantic_search(user_input, intents_json):
                 if(i['tag']== tag):
                     result = random.choice(i['responses'])
                     break
-                return result, tag
+            return result, tag
     except KeyError:
-        return "I am sorry can you type that again? If you are trying to use emojis we have yet to add that feature.", None
+        return "I am sorry can you type that again? If you are trying to use emojis we are yet to add that feature.", None
     
     # Assess the severity of mental illness and provides response accordingly
 def sentiment_analysis(user_input):
     scores = sid.polarity_scores(user_input)
-    if scores['compound'] <-0.2:
-        return 'Psychiatric consultation'
-    elif (-0.2 <= scores['compound'] <= 0.2):
-        return 'send youtube video'
-    else:
-        return 'you are ok'
+    
+    return scores['compound']
+    # if scores['compound'] <-0.2:
+    #     return 'Psychiatric consultation'
+    # elif (-0.2 <= scores['compound'] <= 0.2):
+    #     return 'send youtube video'
+    # else:
+    #     return 'you are ok'
 
 
 #Based off intents file tags generates a response
@@ -154,6 +156,7 @@ def getResponse(ints, intents_json):
     print(tag)
     list_of_intents = intents_json['intents']
     for i in list_of_intents:
+        print(i)
         if(i['tag']== tag):
             result = random.choice(i['responses'])
             break
