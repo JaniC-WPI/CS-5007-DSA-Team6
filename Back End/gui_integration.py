@@ -28,17 +28,27 @@ import tkinter
 from tkinter import *
 from googlesearch import search
 from itertools import chain
-user_zipcode = []
-
+user_zipcode = None
+res3 = None
+res4 = None
 # importing the patterns and ignore words from the chatbot.py
 documents = chatbot.documents
 ignore_words = chatbot.ignore_words
 
+ignore_words = [lemmatizer.lemmatize(word.lower()) for word in ignore_words]
+ignore_char = ['?', '!', '.', ':', ',']
+
+docs = [documents[j][0] for j in range(len(documents))]
+for i in ignore_char:
+    for s in docs:
+        if i in s:
+            s.remove(i)
+
 # Creating a list of patterns to be used later to get the response either based on the intents file or the semantic search
 doc_lst = []
-for i in range(len(documents)):
-    doc_lst.append(" ".join(documents[i][0]))
-
+for i in range(len(docs)):
+    doc_lst.append(" ".join(docs[i]))
+doc_lst = [lemmatizer.lemmatize(word.lower()) for word in doc_lst]
 
 #Tokenizes and lemmatizes the sentences
 def clean_up_sentence(sentence):
@@ -108,33 +118,33 @@ def get_sentence_vector(sentence):
 
 # Semantic analysis
 def semantic_search(user_input, intents_json):
-    print("Semantic Search is called")
-    try:        
-        sim_score = []
-        for i in range(len(documents)):
-        # print(corpus)
-            doc1 = user_input
-            print(doc1)
-            doc1_vector = get_sentence_vector(doc1)
-            # print(doc1_vector)
-            doc2 = [doc for doc in documents[i][0] if doc not in ignore_words]
-            # print(doc2)
-            doc2 = " ".join(doc2)
-            print(doc2)
-            doc2_vector = get_sentence_vector(doc2)    
-            sim_lst = cosine_similarity([doc1_vector, doc2_vector])
-            sim_score.append(sim_lst[1][0])
+        print("Semantic Search is called")   
+        try:
+            sim_score = []
+            for i in range(len(documents)):
+                # print(corpus)
+                doc1 = user_input
+                # print(doc1)
+                doc1_vector = get_sentence_vector(doc1)
+                # print(doc1_vector)
+                doc2 = [doc for doc in documents[i][0] if doc not in ignore_words]
+                # print(doc2)
+                doc2 = " ".join(doc2)
+                # print(doc2)
+                doc2_vector = get_sentence_vector(doc2)    
+                sim_lst = cosine_similarity([doc1_vector, doc2_vector])
+                sim_score.append(sim_lst[1][0])
             tag = documents[sim_score.index(max(sim_score))][1]
             print(tag)
-            # print(max(sim_score))
+                # print(max(sim_score))
             list_of_intents = intents_json['intents']
             for i in list_of_intents:
                 if(i['tag']== tag):
                     result = random.choice(i['responses'])
                     break
             return result, tag
-    except KeyError:
-        return "I am sorry can you type that again? If you are trying to use emojis we are yet to add that feature.", None
+        except KeyError:
+            return "I am sorry can you type that again? If you are trying to use emojis we are yet to add that feature.", None
     
     # Assess the severity of mental illness and provides response accordingly
 def sentiment_analysis(user_input):
@@ -163,6 +173,8 @@ def getResponse(ints, intents_json):
     return result, tag
 
 def zipsearch(user_input_zipcode):
+    global user_zipcode
+    print("Zip search is getting called")
     #Open up a file containing all the zip codes in Massachusets and copy to a 1D list
     filename = "zipcodes.csv"
     with open(filename, 'r') as csvfile:
@@ -179,7 +191,8 @@ def zipsearch(user_input_zipcode):
     if user_input_zipcode[-1] in flatten_list:
         print(user_input_zipcode[-1])
         print(user_input_zipcode[-1] in flatten_list)
-        user_zipcode.append(user_input_zipcode[-1])
+        user_zipcode = user_input_zipcode[-1]
+        print(user_zipcode)
         return "Thank you for answering."
     else:
         print(user_input_zipcode[-1])
@@ -188,29 +201,33 @@ def zipsearch(user_input_zipcode):
 
 #Handles the bots responses based off the input and intents file and semantic search
 def chatbot_response(msg):
+    global res3, res4
     print("Message is", msg)
     msg_len = len(msg)
     msg = msg[:msg_len - 2]
+    for i in ignore_char:
+        msg = msg.replace(i,"").lower()
     # msg = list(msg.split(" "))
     print(msg)
 # print(doc_lst)
     if msg in doc_lst:
         print(msg in doc_lst)
         ints = predict_class(msg, model)
+        print(ints)
         res1 = getResponse(ints, intents)
-        if res1[1] in ('Depression', 'psychosis', 'anxiety'):
+        if res1[1] in ('Depression', 'psychosis', 'Anxiety'):
             res3 = sentiment_analysis(msg)
-        return res1[0]
-    elif msg.startswith("My zipcode is "):
+        return res1[0], res3
+    elif msg.startswith("my zipcode is "):
         res5 = zipsearch(msg)
-        return res5
+        return res5, None
     else:
         print(msg in doc_lst)
         res2 = semantic_search(msg, intents)
-        if res2[1] in ('Depression', 'psychosis', 'anxiety'):
+        if res2[1] in ('Depression', 'psychosis', 'Anxiety'):
             res4 = sentiment_analysis(msg)
         print(res2[0])
-        return res2[0]
+        return res2[0], res4
 
 #When the user enters a zip code this function is run. It will double check that the zip code is apart of the state of MA. Need to store zip code moving foreword if it is valid.
 # def zipsearch(user_input_zipcode):
@@ -270,21 +287,29 @@ def age_checker(check_msg):
                     
 def give_url(message):
     #We can change the numbers later this is just for the test
-    sentiment_analysis_test = 25
-    if sentiment_analysis_test > 20:
+    sentiment_analysis_test = chatbot_response(message)[1]
+    print(sentiment_analysis_test)
+    print(user_zipcode)
+    if sentiment_analysis_test < -0.2:
         try:
-                         #Google Search query results as a Python List of URLs
-                         query = 'psychiatrists near ' + user_zipcode[0]
-                         #Right now it gathers three results from google and puts them into a list. num is the number of results it will find. stop is how many it will put into the list. pause is how many times it will search(I think).
-                         search_result_list = list(search(query, tld="co.in", num=3, stop=3, pause=1))
-                         #prints out the url if it contains psychology today. This can be changed.
-                         for url in search_result_list:
-                             if url.startswith('https://www.psychologytoday.com'):
-                                 print(url)
-                                 return str("Here are a list of psychiatrists in your area: ", url)
+            #Google Search query results as a Python List of URLs
+            query = 'psychiatrists near ' + str(user_zipcode)
+            print(query)
+            #Right now it gathers three results from google and puts them into a list. num is the number of results it will find. stop is how many it will put into the list. pause is how many times it will search(I think).
+            search_result_list = list(search(query))
+            print(search_result_list)
+            # print(search(query, tld="co.in", num=20, stop=20, pause=1))
+            # print(search_result_list)
+            # #prints out the url if it contains psychology today. This can be changed.
+            for i in search_result_list:
+                if i.startswith('https://www.psychologytoday.com'):
+                    url = i
+                    print(type(url))
+            return "Here are a list of psychiatrists in your area: " + url
+            # return "Something is returned"
         except:
-                         return str("Something went wrong with your video search. Please check your internet connection and try again.")
-    elif 10 < sentiment_analysis_test <= 20:
+            return str("Something went wrong with your video search. Please check your internet connection and try again.")
+    elif -0.2 <= sentiment_analysis_test <= 0.2:
         try:
                          #Google Search query results as a Python List of URLs
                          query = 'meditation youtube videos'

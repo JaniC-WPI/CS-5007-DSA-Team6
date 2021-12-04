@@ -71,10 +71,10 @@ class ChatBotGUI:
         text_len = int(emoji.demojize(text).count(":") / 2) + len(text) + 1
         text_bg = "#2165db" if name.startswith("ChatBot") else "#04cc65"
         if text_len < 30:
-            text_widget = Text(text_frame, wrap=WORD, background=text_bg, width=text_len, height=1,
+            text_widget = Text(text_frame, wrap=WORD, background=text_bg, width=text_len, height=1, font=("Bree Serif", 12),
                                relief=GROOVE, fg = 'white')
         else:
-            text_widget = Text(text_frame, wrap=WORD, background=text_bg, width=30, font=10, height=text_len/30,
+            text_widget = Text(text_frame, wrap=WORD, background=text_bg, width=30, height=text_len/30, font=("Bree Serif", 12),
                                relief=GROOVE, fg = 'white')
         text_widget.pack(side=LEFT if align == "nw" else RIGHT)
         text_widget.insert(END, text)
@@ -147,12 +147,12 @@ class ChatBotGUI:
         age_response = gui_integration.age_checker(msg)
         
         if msg != '':
-            res = gui_integration.chatbot_response(msg)
+            res = gui_integration.chatbot_response(msg)[0]
             self.new_text(name=self.user_name, text=msg, align="ne")
             self.user_input.delete("1.0", END)
         # Call chatbot to return response.
             self.new_text(name="ChatBot", text=res, align="nw")
-            if res.endswith("As well as how long you have been feeling that way"):
+            if res.endswith("I am sorry to hear that, here are some resources and suggestions that might help. Looking things up may take a few minutes. Please give me some time."):
                 custom_response = gui_integration.give_url(msg)
                 self.new_text(name="ChatBot", text=custom_response, align="nw")
 
