@@ -5,9 +5,6 @@ Created on Sat Nov 13 23:05:39 2021
 @author: joshu
 """
 import nltk
-nltk.download('vader_lexicon')
-nltk.download('punkt')
-nltk.download('wordnet')
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
