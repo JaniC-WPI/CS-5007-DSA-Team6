@@ -25,18 +25,18 @@ def position_to_center(win):
 
 class ChatBotGUI:
     def __init__(self):
-        self.user_name = ""
-        self.conversation_win = None
-        self.scrolled_win = None
-    # the whole conversation between user and ChatBot is saved in a member self.all_conversations of class ChatBotGUI.
-        self.all_conversations = []
-        self.user_input = None
-        self.emoji_button = None
-        self.bottom_frame = None
-        self.input_scrollbar = None
-        self.root = Tk()
+        self.__user_name = ""
+        self.__conversation_win = None
+        self.__scrolled_win = None
+    # the whole conversation between user and ChatBot is saved in a member self.__all_conversations of class ChatBotGUI.
+        self.__all_conversations = []
+        self.__user_input = None
+        self.__emoji_button = None
+        self.__bottom_frame = None
+        self.__input_scrollbar = None
+        self.__root = Tk()
 
-        position_to_center(win=self.root)
+        position_to_center(win=self.__root)
 
     def start(self):
         welcome_win = Toplevel()
@@ -59,14 +59,14 @@ class ChatBotGUI:
 
         position_to_center(win=welcome_win)
 
-        self.root.mainloop()
+        self.__root.mainloop()
 
     def new_text(self, name, text, align):
-        name_widget = Label(self.scrolled_win.scrollwindow, text=name, anchor=align, font=("Bree Serif", 12), foreground="orange")
+        name_widget = Label(self.__scrolled_win.scrollwindow, text=name, anchor=align, font=("Bree Serif", 12), foreground="orange")
         name_widget.pack(side=TOP, fill=X)
-        self.all_conversations.append(name_widget)
+        self.__all_conversations.append(name_widget)
         # create dynamic text_frame to store each dialog. This is a hard work for our project.
-        text_frame = Frame(self.scrolled_win.scrollwindow)
+        text_frame = Frame(self.__scrolled_win.scrollwindow)
         text_frame.pack(side=TOP, fill=X)
         text_len = int(emoji.demojize(text).count(":") / 2) + len(text) + 1
         text_bg = "#2165db" if name.startswith("ChatBot") else "#04cc65"
@@ -79,43 +79,43 @@ class ChatBotGUI:
         text_widget.pack(side=LEFT if align == "nw" else RIGHT)
         text_widget.insert(END, text)
         text_widget.config(state=DISABLED)
-        self.all_conversations.append(text_widget)
+        self.__all_conversations.append(text_widget)
 
-        self.scrolled_win.canv.update_idletasks()
-        self.scrolled_win.canv.yview_moveto("1.0")
+        self.__scrolled_win.canv.update_idletasks()
+        self.__scrolled_win.canv.yview_moveto("1.0")
 
     def open_chat_win(self, welcome_win, name):
-        self.user_name = name
+        self.__user_name = name
         welcome_win.destroy()
-        self.root.deiconify()
-        self.root.title("Mental Health ChatBot")
+        self.__root.deiconify()
+        self.__root.title("Mental Health ChatBot")
         #Had to change this to true to resize window and see things.
-        self.root.resizable(width=False, height=False)
-        self.root.configure(width=400, height=500)
+        self.__root.resizable(width=False, height=False)
+        self.__root.configure(width=400, height=500)
 
-        self.conversation_win = Frame(self.root, highlightbackground = '#2165db', 	highlightcolor = '#2165db', highlightthickness = 5)
-        self.conversation_win.place(relheight=0.90, relwidth=1, rely=0, relx=0)
-        self.scrolled_win = ScrolledWindow(parent=self.conversation_win)
+        self.__conversation_win = Frame(self.__root, highlightbackground = '#2165db', 	highlightcolor = '#2165db', highlightthickness = 5)
+        self.__conversation_win.place(relheight=0.90, relwidth=1, rely=0, relx=0)
+        self.__scrolled_win = ScrolledWindow(parent=self.__conversation_win)
         # set up 95 empty space for making a nice look new text position
         self.new_text(name="ChatBot" + " " * 78,
-                      text="Hi " + self.user_name + ", what can I do for you today?",
+                      text="Hi " + self.__user_name + ", what can I do for you today?",
                       align="nw")
 
-        self.bottom_frame = Frame(self.root, highlightbackground = '#2165db', 	highlightcolor = '#2165db', highlightthickness = 5)
-        self.bottom_frame.place(relheight=0.1, relwidth=1, rely=0.9, relx=0)
-        self.emoji_button = Button(self.bottom_frame, command=self.__open_emoji_dialog, text=emoji.emojize(":grinning_face:"),
+        self.__bottom_frame = Frame(self.__root, highlightbackground = '#2165db', 	highlightcolor = '#2165db', highlightthickness = 5)
+        self.__bottom_frame.place(relheight=0.1, relwidth=1, rely=0.9, relx=0)
+        self.__emoji_button = Button(self.__bottom_frame, command=self.__open_emoji_dialog, text=emoji.emojize(":grinning_face:"),
                                    width=1, height=2)
-        self.emoji_button.pack(side=LEFT, fill=X)
+        self.__emoji_button.pack(side=LEFT, fill=X)
         #Original colors were gray
-        self.user_input = Text(self.bottom_frame, width=60, height=3, wrap=WORD, highlightbackground="#2165db", highlightcolor="#2165db", highlightthickness=5)
-        self.input_scrollbar = Scrollbar(self.bottom_frame, orient=VERTICAL, command=self.user_input.yview)
-        self.input_scrollbar.pack(side=RIGHT, fill=Y)
-        self.user_input["yscrollcommand"] = self.input_scrollbar.set
-        self.user_input.pack(side=LEFT, fill=X)
-        self.user_input.focus()
-        self.user_input.bind("<KeyRelease-Return>", self.__send_message)
+        self.__user_input = Text(self.__bottom_frame, width=60, height=3, wrap=WORD, highlightbackground="#2165db", highlightcolor="#2165db", highlightthickness=5)
+        self.__input_scrollbar = Scrollbar(self.__bottom_frame, orient=VERTICAL, command=self.__user_input.yview)
+        self.__input_scrollbar.pack(side=RIGHT, fill=Y)
+        self.__user_input["yscrollcommand"] = self.__input_scrollbar.set
+        self.__user_input.pack(side=LEFT, fill=X)
+        self.__user_input.focus()
+        self.__user_input.bind("<KeyRelease-Return>", self.__send_message)
 
-        position_to_center(win=self.root)
+        position_to_center(win=self.__root)
 
     def __open_emoji_dialog(self):
         emoji_win = Toplevel()
@@ -134,7 +134,7 @@ class ChatBotGUI:
         position_to_center(win=emoji_win)
 
     def __select_emoji(self, emojiString):
-        self.user_input.insert(END, emoji.emojize(emojiString))
+        self.__user_input.insert(END, emoji.emojize(emojiString))
 
     def __send_message(self, event):
         # will keep adjustment : add scorllbar in the message area, adjust the size of message area
@@ -148,8 +148,8 @@ class ChatBotGUI:
         
         if msg != '':
             res = gui_integration.chatbot_response(msg)[0]
-            self.new_text(name=self.user_name, text=msg, align="ne")
-            self.user_input.delete("1.0", END)
+            self.new_text(name=self.__user_name, text=msg, align="ne")
+            self.__user_input.delete("1.0", END)
         # Call chatbot to return response.
             self.new_text(name="ChatBot", text=res, align="nw")
             if res.endswith("I am sorry to hear that, here are some resources and suggestions that might help. Looking things up may take a few minutes. Please give me some time."):
@@ -180,7 +180,7 @@ class ChatBotGUI:
         #             gui.insert(END, "Bot: " + stored_response + '\n\n')
         #         else:
         #             gui.insert(END, "Bot: " + res + '\n\n')
-        #         self.user_input.delete("1.0", END)
+        #         self.__user_input.delete("1.0", END)
                 
         #         #This will still run even if the user doesnt activate the custom response so have to put a try/except block here.
         #     except TypeError:
@@ -192,7 +192,7 @@ class ChatBotGUI:
         # gui.yview(END)
         
     # self.new_text(name=self.user_name, text=message, align="ne")
-    # self.user_input.delete("1.0", END)
+    # self.__user_input.delete("1.0", END)
         # Call chatbot to return response.
         # self.new_text(name="ChatBot", text="What a good day!", align="nw")
 
