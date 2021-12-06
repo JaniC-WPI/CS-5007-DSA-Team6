@@ -3,6 +3,7 @@ from tkinter import *
 from scrolled_win import ScrolledWindow
 import emoji
 import webbrowser
+# link_url = "https://www.youtube.com"
 
 # emoji resource: https://www.geeksforgeeks.org/python-program-to-print-emojis/
 # emoji resource: https://unicode.org/emoji/charts/full-emoji-list.html
@@ -88,7 +89,7 @@ class ChatBotGUI:
         self.scrolled_win.canv.update_idletasks()
         self.scrolled_win.canv.yview_moveto("1.0")
 
-    def open_chat_win(self, welcome_win, name):
+    def open_chat_win(self, welcome_win, name, action=None):
         self.user_name = name
         welcome_win.destroy()
         self.root.deiconify()
@@ -118,8 +119,14 @@ class ChatBotGUI:
         self.user_input.pack(side=LEFT, fill=X)
         self.user_input.focus()
         self.user_input.bind("<KeyRelease-Return>", self.__send_message)
-
         position_to_center(win=self.root)
+    
+    def callback(self):
+        webbrowser.open_new(link_url)
+
+    def _on_click(self, event):
+        if self._action:
+            self._action()
 
     def __open_emoji_dialog(self):
         emoji_win = Toplevel()
@@ -154,12 +161,16 @@ class ChatBotGUI:
         
         if msg != '':
             res = gui_integration.chatbot_response(msg)[0]
+            # self.new_text(name="ChatBot", text=link_url, align="nw", action=self.callback)
             self.new_text(name=self.user_name, text=msg, align="ne")
             self.user_input.delete("1.0", END)
         # Call chatbot to return response.
             self.new_text(name="ChatBot", text=res, align="nw")
             if res.endswith("I am sorry to hear that, here are some resources and suggestions that might help. Looking things up may take a few minutes. Please give me some time."):
                 custom_response = gui_integration.give_url(msg)
+                # resp_1, resp_2 = custom_response.split(":", 1)
+                # print(resp_1)
+                # print(resp_2)                
                 self.new_text(name="ChatBot", text=custom_response, align="nw")
             elif res.endswith("Thank you for answering."):
                 response = "Can you please tell me about your occupation"

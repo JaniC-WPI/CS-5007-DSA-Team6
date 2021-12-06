@@ -308,15 +308,18 @@ def give_url(message):
             query = 'psychiatrists near ' + str(user_zipcode)
             print(query)
             #Right now it gathers three results from google and puts them into a list. num is the number of results it will find. stop is how many it will put into the list. pause is how many times it will search(I think).
-            # search_result_list = list(search(query))
-            # print(search_result_list)
-            # print(search(query, tld="co.in", num=20, stop=20, pause=1))
-            # print(search_result_list)
             # #prints out the url if it contains psychology today. This can be changed.
             for i in list(search(query)):
                 if i.startswith('https://www.psychologytoday.com'):
                     url = i
                     print(url)
+                    # link = url
+                    # hyperlink_format = '<a href="{link}"></a>'
+                    # hyperlink_format.format(link = link)
+                    # hyper_link = hyperlink_format.format(link = link)
+                    # hyper_link = hyper_link.replace("<a href=\"", "")
+                    # hyper_link = hyper_link.replace("\"></a>", "")
+                    # print(hyperlink)
             return "Here are a list of psychiatrists in your area: " + url
             # return "Something is returned"
         except:
