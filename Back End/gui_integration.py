@@ -316,7 +316,6 @@ def give_url(message):
             for i in list(search(query)):
                 if i.startswith('https://www.psychologytoday.com'):
                     url = i
-                    url = <a href="link">Text</a>
                     print(url)
             return "Here are a list of psychiatrists in your area: " + url
             # return "Something is returned"
