@@ -37,7 +37,7 @@ sem_resp_sentiment = None
 documents = chatbot.documents
 ignore_words = chatbot.ignore_words
 
-# ignore_words = [lemmatizer.lemmatize(word.lower()) for word in ignore_words]
+ignore_words = [lemmatizer.lemmatize(word.lower()) for word in ignore_words]
 ignore_char = ['?', '!', '.', ':', ',']
 
 docs = [documents[j][0] for j in range(len(documents))]

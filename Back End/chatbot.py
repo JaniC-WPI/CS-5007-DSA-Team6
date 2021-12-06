@@ -20,8 +20,8 @@ import random
 words=[]
 classes = []
 documents = []
-ignore_words = ['?', '!', '.', ':', ',', 'I', 'am', 'feel', 'like']
-data_file = open('latest_intents.json').read()
+ignore_words = ['?', '!', '.', ':', ',', 'I', 'am', 'feel', 'like', 'having', 'is']
+data_file = open('fresh_intents.json').read()
 intents = json.loads(data_file)
 
 for intent in intents['intents']:
