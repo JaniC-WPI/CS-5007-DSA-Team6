@@ -29,13 +29,15 @@ from tkinter import *
 from googlesearch import search
 from itertools import chain
 user_zipcode = None
-res3 = None
-res4 = None
+search_result_list = []
+result = ""
+get_resp_sentiment = None
+sem_resp_sentiment = None
 # importing the patterns and ignore words from the chatbot.py
 documents = chatbot.documents
 ignore_words = chatbot.ignore_words
 
-ignore_words = [lemmatizer.lemmatize(word.lower()) for word in ignore_words]
+# ignore_words = [lemmatizer.lemmatize(word.lower()) for word in ignore_words]
 ignore_char = ['?', '!', '.', ':', ',']
 
 docs = [documents[j][0] for j in range(len(documents))]
@@ -150,7 +152,9 @@ def semantic_search(user_input, intents_json):
 def sentiment_analysis(user_input):
     scores = sid.polarity_scores(user_input)
     
-    return scores['compound']
+    print(scores)
+    
+    return scores['neg']
     # if scores['compound'] <-0.2:
     #     return 'Psychiatric consultation'
     # elif (-0.2 <= scores['compound'] <= 0.2):
@@ -201,33 +205,41 @@ def zipsearch(user_input_zipcode):
 
 #Handles the bots responses based off the input and intents file and semantic search
 def chatbot_response(msg):
-    global res3, res4
+    global get_resp_sentiment, sem_resp_sentiment
     print("Message is", msg)
     msg_len = len(msg)
     msg = msg[:msg_len - 2]
     for i in ignore_char:
         msg = msg.replace(i,"").lower()
-    # msg = list(msg.split(" "))
     print(msg)
+    # for i in ignore_char:
+    #     msg = msg.replace(i,"").lower()
+    # msg = list(msg.split(" "))
 # print(doc_lst)
     if msg in doc_lst:
         print(msg in doc_lst)
         ints = predict_class(msg, model)
         print(ints)
-        res1 = getResponse(ints, intents)
-        if res1[1] in ('Depression', 'psychosis', 'Anxiety'):
-            res3 = sentiment_analysis(msg)
-        return res1[0], res3
+        get_resp = getResponse(ints, intents)
+        if get_resp[1] in ('Depression', 'psychosis', 'Anxiety'):
+            get_resp_sentiment = sentiment_analysis(msg)
+        return get_resp[0], get_resp_sentiment
     elif msg.startswith("my zipcode is "):
-        res5 = zipsearch(msg)
-        return res5, None
+        zip_resp = zipsearch(msg)
+        return zip_resp, None
+    elif msg.startswith("i decline"):
+        decline_resp = "Understood! May I know where you live? You can give me your zip code just say \"My zip code is\" "
+        return decline_resp, None
+    elif msg.endswith(" years old"):
+        age_response = "Thank you for answering. May I know where you live? You can give me your zip code just say \"My zip code is\" "
+        return age_response, None
     else:
         print(msg in doc_lst)
-        res2 = semantic_search(msg, intents)
-        if res2[1] in ('Depression', 'psychosis', 'Anxiety'):
-            res4 = sentiment_analysis(msg)
-        print(res2[0])
-        return res2[0], res4
+        sem_resp = semantic_search(msg, intents)
+        if sem_resp[1] in ('Depression', 'psychosis', 'Anxiety'):
+            sem_resp_sentiment = sentiment_analysis(msg)
+        print(sem_resp[0])
+        return sem_resp[0], sem_resp_sentiment
 
 #When the user enters a zip code this function is run. It will double check that the zip code is apart of the state of MA. Need to store zip code moving foreword if it is valid.
 # def zipsearch(user_input_zipcode):
@@ -286,41 +298,52 @@ def age_checker(check_msg):
 #         return "Please enter a valid MA zip code"
                     
 def give_url(message):
-    #We can change the numbers later this is just for the test
+    global search_result_list, result    
     sentiment_analysis_test = chatbot_response(message)[1]
     print(sentiment_analysis_test)
     print(user_zipcode)
-    if sentiment_analysis_test < -0.2:
+    if sentiment_analysis_test > 0.2:
         try:
             #Google Search query results as a Python List of URLs
             query = 'psychiatrists near ' + str(user_zipcode)
             print(query)
             #Right now it gathers three results from google and puts them into a list. num is the number of results it will find. stop is how many it will put into the list. pause is how many times it will search(I think).
-            search_result_list = list(search(query))
-            print(search_result_list)
+            # search_result_list = list(search(query))
+            # print(search_result_list)
             # print(search(query, tld="co.in", num=20, stop=20, pause=1))
             # print(search_result_list)
             # #prints out the url if it contains psychology today. This can be changed.
-            for i in search_result_list:
+            for i in list(search(query)):
                 if i.startswith('https://www.psychologytoday.com'):
                     url = i
-                    print(type(url))
+                    url = <a href="link">Text</a>
+                    print(url)
             return "Here are a list of psychiatrists in your area: " + url
             # return "Something is returned"
         except:
             return str("Something went wrong with your video search. Please check your internet connection and try again.")
-    elif -0.2 <= sentiment_analysis_test <= 0.2:
+    elif 0.05 <= sentiment_analysis_test <= 0.2:
         try:
-                         #Google Search query results as a Python List of URLs
-                         query = 'meditation youtube videos'
-                         #Right now it gathers three results from google and puts them into a list. num is the number of results it will find. stop is how many it will put into the list. pause is how many times it will search(I think).
-                         search_result_list = list(search(query, tld="co.in", num=3, stop=3, pause=1))
-                         #prints out the url if it contains psychology today. This can be changed.
-                         for url in search_result_list:
-                                 print(url)
-                                 return str("Here are some calming Youtube videos for you: ", url)
+            #Google Search query results as a Python List of URLs
+            query = 'meditation youtube videos'
+            #Right now it gathers three results from google and puts them into a list. num is the number of results it will find. stop is how many it will put into the list. pause is how many times it will search(I think).
+            for i in search(query):
+                if i.startswith("https://www.youtube.com"):
+                    search_result_list.append(i)
+                    search_result = search_result_list[:5]
+            print(search_result)
+            for j in search_result[:5]:
+                result += j
+                result += "\n"
+                    
+            #prints out the url if it contains psychology today. This can be changed.
+            # for i in search_result_list:
+            #     if i.startswith('https://www.youtube.com'):
+            #         url = i
+            #     print(url)
+            return str("Here are some calming Youtube videos for you: " + result)
         except:
-                         return str("Something went wrong with your video search. Please check your internet connection and try again.")
+            return str("Something went wrong with your video search. Please check your internet connection and try again.")
     else:
         return "You are fine take a walk and clear your head"
 

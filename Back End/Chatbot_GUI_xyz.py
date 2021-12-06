@@ -2,6 +2,7 @@ import gui_integration
 from tkinter import *
 from scrolled_win import ScrolledWindow
 import emoji
+import webbrowser
 
 # emoji resource: https://www.geeksforgeeks.org/python-program-to-print-emojis/
 # emoji resource: https://unicode.org/emoji/charts/full-emoji-list.html
@@ -73,8 +74,11 @@ class ChatBotGUI:
         if text_len < 30:
             text_widget = Text(text_frame, wrap=WORD, background=text_bg, width=text_len, height=1, font=("Bree Serif", 12),
                                relief=GROOVE, fg = 'white')
-        else:
+        elif 30 <= text_len < 210:
             text_widget = Text(text_frame, wrap=WORD, background=text_bg, width=30, height=text_len/30, font=("Bree Serif", 12),
+                               relief=GROOVE, fg = 'white')
+        else:
+            text_widget = Text(text_frame, wrap=WORD, background=text_bg, width=30, height=text_len/20, font=("Bree Serif", 12),
                                relief=GROOVE, fg = 'white')
         text_widget.pack(side=LEFT if align == "nw" else RIGHT)
         text_widget.insert(END, text)
@@ -91,7 +95,7 @@ class ChatBotGUI:
         self.root.title("Mental Health ChatBot")
         #Had to change this to true to resize window and see things.
         self.root.resizable(width=False, height=False)
-        self.root.configure(width=400, height=500)
+        self.root.configure(width=400, height=400)
 
         self.conversation_win = Frame(self.root, highlightbackground = '#2165db', 	highlightcolor = '#2165db', highlightthickness = 5)
         self.conversation_win.place(relheight=0.90, relwidth=1, rely=0, relx=0)
@@ -142,9 +146,11 @@ class ChatBotGUI:
         # if add some emoji what kind do we need? sad, happy, angry, ........?
         msg = event.widget.get("1.0", END)
         
-        stored_response = "May I know where you live? You can give me your zip code just say \"My zip code is\" "
+        stored_response = "Understood! May I know where you live? You can give me your zip code just say \"My zip code is\" "
         name_response = gui_integration.name_checker(msg)
-        age_response = gui_integration.age_checker(msg)
+        # age_response = gui_integration.age_checker(msg)
+        age_response = "Thank you for answering. May I know where you live? You can give me your zip code just say \"My zip code is\" "
+        
         
         if msg != '':
             res = gui_integration.chatbot_response(msg)[0]
@@ -155,6 +161,15 @@ class ChatBotGUI:
             if res.endswith("I am sorry to hear that, here are some resources and suggestions that might help. Looking things up may take a few minutes. Please give me some time."):
                 custom_response = gui_integration.give_url(msg)
                 self.new_text(name="ChatBot", text=custom_response, align="nw")
+            elif res.endswith("Thank you for answering."):
+                response = "Can you please tell me about your occupation"
+                self.new_text(name="ChatBot", text=response, align="nw")
+            # elif msg.endswith("i decline"):
+            #     self.new_text(name="ChatBot", text = stored_response, align="nw")
+            #     # self.new_text(name="ChatBot", text=stored_response, align="nw")
+            #     #Tried to fix the issue with age here. Did not work...
+            # elif msg.endswith(" years old"):                    
+            #     self.new_text(name="ChatBot", text=age_response, align="nw")
 
         
         
