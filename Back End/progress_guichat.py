@@ -20,7 +20,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 model = load_model('chatbot_model.h5')
 import json
 import random
-intents = json.loads(open('latest_intents.json').read())
+intents = json.loads(open('fresh_intents.json').read())
 words = pickle.load(open('words.pkl','rb'))
 classes = pickle.load(open('classes.pkl','rb'))
 import emoji
@@ -30,7 +30,7 @@ from tkinter import *
 from googlesearch import search
 from itertools import chain
 
-# importing the patterns and ignore words from the chatbot.py
+# importing the patterns and words from the chatbot.py
 documents = chatbot.documents
 ignore_words = chatbot.ignore_words
 
@@ -46,6 +46,7 @@ def clean_up_sentence(sentence):
     sentence_words = nltk.word_tokenize(sentence)
     # stem each word - create short form for word
     sentence_words = [lemmatizer.lemmatize(word.lower()) for word in sentence_words]
+    print(sentence_words)
     return sentence_words
 
 # return bag of words array: 0 or 1 for each word in the bag that exists in the sentence
@@ -153,7 +154,6 @@ def getResponse(ints, intents_json):
             break
     return result, tag
 
-
 #Handles the bots responses based off the input and intents file and semantic search
 def chatbot_response(msg):
     print("Message is", msg)
@@ -161,6 +161,7 @@ def chatbot_response(msg):
     if msg in doc_lst:
         print(msg in doc_lst)
         ints = predict_class(msg, model)
+        print(ints)
         res1 = getResponse(ints, intents)
         if res1[1] in ('Depression', 'psychosis'):
             res3 = sentiment_analysis(msg)

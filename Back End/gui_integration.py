@@ -313,13 +313,6 @@ def give_url(message):
                 if i.startswith('https://www.psychologytoday.com'):
                     url = i
                     print(url)
-                    # link = url
-                    # hyperlink_format = '<a href="{link}"></a>'
-                    # hyperlink_format.format(link = link)
-                    # hyper_link = hyperlink_format.format(link = link)
-                    # hyper_link = hyper_link.replace("<a href=\"", "")
-                    # hyper_link = hyper_link.replace("\"></a>", "")
-                    # print(hyperlink)
             return "Here are a list of psychiatrists in your area: " + url
             # return "Something is returned"
         except:

@@ -3,6 +3,10 @@ from tkinter import *
 from scrolled_win import ScrolledWindow
 import emoji
 import webbrowser
+from functools import partial
+resp_2 = None
+url_resp = ""
+
 # link_url = "https://www.youtube.com"
 
 # emoji resource: https://www.geeksforgeeks.org/python-program-to-print-emojis/
@@ -120,14 +124,81 @@ class ChatBotGUI:
         self.user_input.focus()
         self.user_input.bind("<KeyRelease-Return>", self.__send_message)
         position_to_center(win=self.root)
+        
+    def new_button(self, name, text, align):
+        button_frame = Frame(self.scrolled_win.scrollwindow)
+        button_frame.pack(side=TOP, fill=X)
+        button_len = int(emoji.demojize(text).count(":") / 2) + len(text) + 1
+        text_bg = "#2165db" if name.startswith("ChatBot") else "#04cc65"
+        if button_len < 30:
+            #If you remove "wrap=WORD" then it becomes a button but the frame automatically gets messed up!
+            button_widget = Button(button_frame, background=text_bg, width=button_len, height=1, font=("Bree Serif", 12),
+                                   fg = 'white', text = text)
+            button_widget.bind("<Button-1>", self.__on_click)
+        elif 30 <= button_len < 210:
+            button_widget = Button(button_frame, background=text_bg, width=30, height=int(button_len/30), font=("Bree Serif", 12), 
+                                   relief=GROOVE, fg = 'white', text = text)
+            button_widget.bind("<Button-1>", self.__on_click)
+        else:
+            button_widget = Button(button_frame, background=text_bg, width=30, height=int(button_len/20), font=("Bree Serif", 12),
+                                   fg = 'white', text = text)
+            button_widget.bind("<Button-1>", self.__on_click)
+            #I will fix up the error handling later
+        try:
+            #Changed how it packed from original
+            button_widget.pack(side=LEFT)
+            #Gives attribute error. But if you comment out it gives a pack error...
+            button_widget.insert(END, text)
+            button_widget.config(state=DISABLED)
+        except:
+            pass
+        self.all_conversations.append(button_widget)               
+                
+        self.scrolled_win.canv.update_idletasks()
+        self.scrolled_win.canv.yview_moveto("1.0")
     
-    def callback(self):
-        webbrowser.open_new(link_url)
+    # def new_label(self, name, text, align):
+    #     label_frame = Frame(self.scrolled_win.scrollwindow)
+    #     button_frame.pack(side=TOP, fill=X)
+    #     button_len = int(emoji.demojize(text).count(":") / 2) + len(text) + 1
+    #     text_bg = "#2165db" if name.startswith("ChatBot") else "#04cc65"
+    #     if button_len < 30:
+    #         #If you remove "wrap=WORD" then it becomes a button but the frame automatically gets messed up!
+    #         button_widget = Button(button_frame, background=text_bg, width=button_len, height=1, font=("Bree Serif", 12),
+    #                         fg = 'white', text = text)
+    #     elif 30 <= button_len < 210:
+    #         button_widget = Button(button_frame, background=text_bg, width=30, height=int(button_len/30), font=("Bree Serif", 12),
+    #                           relief=GROOVE, fg = 'white')
+    #     else:
+    #         button_widget = Button(button_frame, background=text_bg, width=30, height=int(button_len/20), font=("Bree Serif", 12),
+    #                         fg = 'white', text = text)
+    #     #I will fix up the error handling later
+    #     try:
+    #         #Changed how it packed from original
+    #         button_widget.pack(side=LEFT)
+    #         #Gives attribute error. But if you comment out it gives a pack error... 
+    #         button_widget.insert(END, text)
+    #         button_widget.config(state=DISABLED)
+    #     except:
+    #         pass
+    #     self.all_conversations.append(button_widget)
 
-    def _on_click(self, event):
-        if self._action:
-            self._action()
 
+    #     self.scrolled_win.canv.update_idletasks()
+    #     self.scrolled_win.canv.yview_moveto("1.0")
+        
+    def callback(self, url):
+        # chrome path need to have fwd slash and not bkwd slash as in the windows file path
+        chrome_path = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s"
+        webbrowser.get(chrome_path).open(url)
+        # webbrowser.open_new(url)
+        # partial(webbrowser.open, url)
+
+    # def callback(self):
+        # webbrowser.open_new(link_url)
+
+    def __on_click(self, event):
+        self.callback(url_resp)
     def __open_emoji_dialog(self):
         emoji_win = Toplevel()
         emoji_win.title("Emoji")
@@ -148,6 +219,7 @@ class ChatBotGUI:
         self.user_input.insert(END, emoji.emojize(emojiString))
 
     def __send_message(self, event):
+        global resp_2, url_resp
         # will keep adjustment : add scorllbar in the message area, adjust the size of message area
         # and thing about how to set up "return" as entry or \n
         # if add some emoji what kind do we need? sad, happy, angry, ........?
@@ -168,21 +240,43 @@ class ChatBotGUI:
             self.new_text(name="ChatBot", text=res, align="nw")
             if res.endswith("I am sorry to hear that, here are some resources and suggestions that might help. Looking things up may take a few minutes. Please give me some time."):
                 custom_response = gui_integration.give_url(msg)
-                # resp_1, resp_2 = custom_response.split(":", 1)
-                # print(resp_1)
-                # print(resp_2)                
-                self.new_text(name="ChatBot", text=custom_response, align="nw")
+                resp_1, resp_2 = custom_response.split(":", 1)
+                print(resp_1)
+                print(resp_2)                
+                self.new_text(name="ChatBot", text=resp_1, align="nw")
+                if "youtube" not in resp_2:
+                    resp_2 = [resp_2[:32], resp_2[32:]]
+                    print(resp_2)
+                    for i in resp_2:
+                        url_resp += i
+                        url_resp += "\n"
+                    print(url_resp)
+                    self.new_button(name="ChatBot", text=url_resp, align="nw")
+                else:
+                    resp_2 = resp_2.split("\n")
+                    for i in resp_2:
+                        i = [i[:24], i[24:]]
+                        print(i)
+                        for j in i:
+                            # print(url_resp)
+                            # print(j)
+                            url_resp = j
+                            print(url_resp)
+                            # url_resp ="\n"
+                        # print(url_resp)
+                            self.new_button(name="ChatBot", text=url_resp, align="nw")   
+                    # resp_2 = resp2.split("\n")
+                    # for i in resp_2:
+                    #     print
+                    # self.new_button(name="ChatBot", text=url_resp, align="nw")
+                # self.callback(resp_2)
             elif res.endswith("Thank you for answering."):
                 response = "Can you please tell me about your occupation"
                 self.new_text(name="ChatBot", text=response, align="nw")
-            # elif msg.endswith("i decline"):
-            #     self.new_text(name="ChatBot", text = stored_response, align="nw")
-            #     # self.new_text(name="ChatBot", text=stored_response, align="nw")
-            #     #Tried to fix the issue with age here. Did not work...
-            # elif msg.endswith(" years old"):                    
-            #     self.new_text(name="ChatBot", text=age_response, align="nw")
-
-        
+            elif msg.endswith("i decline"):
+                self.new_text(name="ChatBot", text = stored_response, align="nw")
+            elif msg.endswith(" years old"):                    
+                self.new_text(name="ChatBot", text=age_response, align="nw")        
         
 #             #If the user enters the name then the bot will respond with that name
   
