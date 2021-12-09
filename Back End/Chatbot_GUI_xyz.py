@@ -5,6 +5,7 @@ import emoji
 import webbrowser
 from functools import partial
 resp_2 = None
+yt_url_resp = None
 url_resp = ""
 
 # link_url = "https://www.youtube.com"
@@ -135,12 +136,12 @@ class ChatBotGUI:
             button_widget = Button(button_frame, background=text_bg, width=button_len, height=1, font=("Bree Serif", 12),
                                    fg = 'white', text = text)
             button_widget.bind("<Button-1>", self.__on_click)
-        elif 30 <= button_len < 210:
-            button_widget = Button(button_frame, background=text_bg, width=30, height=int(button_len/30), font=("Bree Serif", 12), 
-                                   relief=GROOVE, fg = 'white', text = text)
-            button_widget.bind("<Button-1>", self.__on_click)
+        # elif 30 <= button_len < 210:
+        #     button_widget = Button(button_frame, background=text_bg, width=40, height=2, font=("Bree Serif", 12), 
+        #                            relief=GROOVE, fg = 'white', text = text)
+        #     button_widget.bind("<Button-1>", self.__on_click)
         else:
-            button_widget = Button(button_frame, background=text_bg, width=30, height=int(button_len/20), font=("Bree Serif", 12),
+            button_widget = Button(button_frame, background=text_bg, width=20, height=int(button_len/20), font=("Bree Serif", 12),
                                    fg = 'white', text = text)
             button_widget.bind("<Button-1>", self.__on_click)
             #I will fix up the error handling later
@@ -198,7 +199,10 @@ class ChatBotGUI:
         # webbrowser.open_new(link_url)
 
     def __on_click(self, event):
-        self.callback(url_resp)
+        if url_resp != "":
+            self.callback(url_resp)
+        else:
+            self.callback(yt_url_resp)
     def __open_emoji_dialog(self):
         emoji_win = Toplevel()
         emoji_win.title("Emoji")
@@ -219,7 +223,7 @@ class ChatBotGUI:
         self.user_input.insert(END, emoji.emojize(emojiString))
 
     def __send_message(self, event):
-        global resp_2, url_resp
+        global resp_2, url_resp, yt_url_resp
         # will keep adjustment : add scorllbar in the message area, adjust the size of message area
         # and thing about how to set up "return" as entry or \n
         # if add some emoji what kind do we need? sad, happy, angry, ........?
@@ -253,18 +257,23 @@ class ChatBotGUI:
                     print(url_resp)
                     self.new_button(name="ChatBot", text=url_resp, align="nw")
                 else:
-                    resp_2 = resp_2.split("\n")
+                    resp_2 = resp_2.split("\n")[:-1]
+                    # print(resp_2)
                     for i in resp_2:
                         i = [i[:24], i[24:]]
-                        print(i)
+                        # print(i)
                         for j in i:
                             # print(url_resp)
                             # print(j)
-                            url_resp = j
-                            print(url_resp)
+                            url_resp += j
+                            url_resp+="\n"
+                        self.new_button(name="ChatBot", text=url_resp, align="nw")
+                        yt_url_resp = url_resp
+                        print(url_resp)
+                        url_resp = ""
                             # url_resp ="\n"
                         # print(url_resp)
-                            self.new_button(name="ChatBot", text=url_resp, align="nw")   
+                               
                     # resp_2 = resp2.split("\n")
                     # for i in resp_2:
                     #     print

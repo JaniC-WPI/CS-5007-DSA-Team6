@@ -313,7 +313,7 @@ def give_url(message):
                 if i.startswith('https://www.psychologytoday.com'):
                     url = i
                     print(url)
-            return "Here are a list of psychiatrists in your area: " + url
+            return "Here are a list of psychiatrists in your area:" + url
             # return "Something is returned"
         except:
             return str("Something went wrong with your video search. Please check your internet connection and try again.")
@@ -336,7 +336,7 @@ def give_url(message):
             #     if i.startswith('https://www.youtube.com'):
             #         url = i
             #     print(url)
-            return str("Here are some calming Youtube videos for you: " + result)
+            return str("Here are some calming Youtube videos for you:" + result)
         except:
             return str("Something went wrong with your video search. Please check your internet connection and try again.")
     else:
